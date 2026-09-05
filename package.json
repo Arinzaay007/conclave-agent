@@ -7,6 +7,10 @@
   "scripts": {
     "demo": "node demo/run.js",
     "demo:llm": "node --env-file=.env demo/run.js",
+    "demo:greens": "node demo/greens.js",
+    "demo:greens:llm": "node --env-file=.env demo/greens.js",
+    "demo:reds": "node demo/reds.js",
+    "demo:reds:llm": "node --env-file=.env demo/reds.js",
     "chat": "node src/chat.js",
     "chat:llm": "node --env-file=.env src/chat.js",
     "test": "node --test test/*.test.js",
