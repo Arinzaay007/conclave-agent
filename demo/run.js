@@ -1,16 +1,19 @@
 #!/usr/bin/env node
 /**
- * Conclave demo runner — six scenarios, no funds touched.
+ * Conclave demo runner — nine scenarios, no funds touched.
  *   npm run demo       (deterministic rule personas)
  *   npm run demo:llm   (real LLM personas via .env)
  *
  *  1. Disciplined small BTC dip buy -> committee concurs -> WHITE SMOKE
- *  2. Memecoin FOMO (PEPE)          -> guardrail block (no debate)
- *  3. Oversized SOL chase           -> Risk veto
- *  4. Mid-range ETH, no edge        -> not unanimous -> no trade
- *  5. Small BNB buy                  -> committee reviews size
- *  6. Trade over the notional cap    -> guardrail block ($ cap)
- *  Then: sealed-ballot audit trail summary.
+ *  2. Memecoin FOMO (PEPE)           -> guardrail block (symbol)
+ *  3. Oversized SOL chase            -> Risk veto
+ *  4. Mid-range ETH, no edge         -> not unanimous -> no trade
+ *  5. Small BNB diversification      -> reviewed, denied
+ *  6. Trade over the notional cap     -> guardrail block ($ cap)
+ *  7. Rushed sell of BNB              -> Risk veto (concentration)
+ *  8. Zero-quantity order             -> guardrail block (bad quantity)
+ *  9. Second tiny BTC tranche         -> committee concurs -> WHITE SMOKE
+ *  Then: sealed-ballot audit trail summary + verdict summary.
  */
 import fs from "node:fs";
 import { convene } from "../src/committee.js";
@@ -44,6 +47,18 @@ const SCENARIOS = [
   {
     title: "Scenario 6 — A trade that blows past the size cap",
     proposal: { side: "BUY", symbol: "BTC", quantity: 1, rationale: "go big on BTC" },
+  },
+  {
+    title: "Scenario 7 — A rushed sell into a dip",
+    proposal: { side: "SELL", symbol: "BNB", quantity: 0.5, rationale: "panic sell, market's crashing" },
+  },
+  {
+    title: "Scenario 8 — A malformed order (zero quantity)",
+    proposal: { side: "BUY", symbol: "ETH", quantity: 0, rationale: "maybe buy some ETH?" },
+  },
+  {
+    title: "Scenario 9 — A second, disciplined tiny tranche",
+    proposal: { side: "BUY", symbol: "BTC", quantity: 0.0003, rationale: "add one more small BTC tranche" },
   },
 ];
 

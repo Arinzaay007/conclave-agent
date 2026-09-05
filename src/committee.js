@@ -78,6 +78,10 @@ export async function convene(proposal, account, { dryRun = CONFIG.DRY_RUN, exec
     revealBallot(sealed, ballot);
     ballots.push({ ...ballot, sealed });
     log(`${p.emoji} ${p.name} [${decision.source}]: ${decision.vote} (${decision.confidence}%) — ${decision.reason}`);
+    // Gentle pacing between model calls to stay under free-tier rate limits.
+    if (useLLM && p !== Object.values(PERSONAS).at(-1)) {
+      await new Promise((r) => setTimeout(r, 800));
+    }
   }
 
   // ── 3. Tally ───────────────────────────────────────────────────

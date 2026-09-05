@@ -14,10 +14,10 @@
    🐂 The Bull [rules]: GO (72%) — RSI 31 says deeply oversold — mean-reversion bounce setup, buy the fear.
    📊 The Quant [rules]: GO (68%) — RSI 31 with controlled vol 2.8% — statistically favorable entry zone.
    🛡️ The Risk Officer [rules]: GO (70%) — Size is 2.6% of balance, liquidity acceptable, risk within mandate.
-   order: SIMULATED BUY 0.0004 BTC (DRY_RUN) id=sim_d558fc3d570c
+   order: SIMULATED BUY 0.0004 BTC (DRY_RUN) id=sim_c8f3549eb188
 
    ⚪ WHITE SMOKE — the committee concurs. Order presented for human confirmation.
-      → SIMULATED: BUY 0.0004 BTC (~$25.68) [sim_d558fc3d570c]
+      → SIMULATED: BUY 0.0004 BTC (~$25.68) [sim_c8f3549eb188]
 
 ────────────────────────────────────────────────────────────────────────
   Scenario 2 — The memecoin FOMO
@@ -73,17 +73,52 @@
 
    ⚫ BLACK SMOKE — no trade. (GUARDRAIL_BLOCK)
 
+────────────────────────────────────────────────────────────────────────
+  Scenario 7 — A rushed sell into a dip
+  proposal: SELL 0.5 BNB — "panic sell, market's crashing"
+────────────────────────────────────────────────────────────────────────
+   evidence: BNB @ $604 | RSI 55 | 24h 1.2% | vol 2.1% | spread 6 bps (fixture)
+   guardrails passed: $302.00 notional, 4 checks
+   🐂 The Bull [rules]: NO-GO (40%) — No momentum edge: RSI 55, 1.2% 24h. Nothing to run with.
+   📊 The Quant [rules]: NO-GO (45%) — Mid-range RSI 55, no statistical edge. Wait for a fat pitch.
+   🛡️ The Risk Officer [rules]: NO-GO (92%) — This trade is 30% of the spot balance — concentration risk. VETO.
+
+   ⚫ BLACK SMOKE — no trade. (RISK_VETO)
+
+────────────────────────────────────────────────────────────────────────
+  Scenario 8 — A malformed order (zero quantity)
+  proposal: BUY 0 ETH — "maybe buy some ETH?"
+────────────────────────────────────────────────────────────────────────
+   evidence: ETH @ $3050 | RSI 48 | 24h -0.6% | vol 3.4% | spread 5 bps (fixture)
+   🚫 guardrail BAD_QUANTITY: quantity 0 is not a positive number
+
+   ⚫ BLACK SMOKE — no trade. (GUARDRAIL_BLOCK)
+
+────────────────────────────────────────────────────────────────────────
+  Scenario 9 — A second, disciplined tiny tranche
+  proposal: BUY 0.0003 BTC — "add one more small BTC tranche"
+────────────────────────────────────────────────────────────────────────
+   evidence: BTC @ $64200 | RSI 31 | 24h -4.2% | vol 2.8% | spread 3 bps (fixture)
+   guardrails passed: $19.26 notional, 4 checks
+   🐂 The Bull [rules]: GO (72%) — RSI 31 says deeply oversold — mean-reversion bounce setup, buy the fear.
+   📊 The Quant [rules]: GO (68%) — RSI 31 with controlled vol 2.8% — statistically favorable entry zone.
+   🛡️ The Risk Officer [rules]: GO (70%) — Size is 1.9% of balance, liquidity acceptable, risk within mandate.
+   order: SIMULATED BUY 0.0003 BTC (DRY_RUN) id=sim_fd054793c0cb
+
+   ⚪ WHITE SMOKE — the committee concurs. Order presented for human confirmation.
+      → SIMULATED: BUY 0.0003 BTC (~$19.26) [sim_fd054793c0cb]
+
 ========================================================================
    SEALED-BALLOT AUDIT TRAIL (commit–reveal)
 ========================================================================
-   ballots sealed & revealed: 12
+   ballots sealed & revealed: 18
    ✅ bull   0x237786a1541b4182ae16…  vote=GO
    ✅ quant  0x3f35fed69a9a07371d05…  vote=GO
    ✅ risk   0x6083841f62232f984ff9…  vote=GO
    ✅ bull   0x14e1b457bfeaba8d2927…  vote=GO
    ✅ quant  0xf3a32544e68f4f601031…  vote=NO-GO
    ✅ risk   0x326168659dc3d6515a1c…  vote=NO-GO
-   …and 6 more
+   …and 12 more
    every revealed ballot matches its pre-verdict seal: YES ✅
 
    In live mode these seal hashes are emitted to BSC testnet BEFORE
@@ -98,4 +133,7 @@
    ⚫ A mid-range trade with no edge  →  NOT_UNANIMOUS
    ⚫ A small, uneventful alt buy  →  NOT_UNANIMOUS
    ⚫ A trade that blows past the size cap  →  GUARDRAIL_BLOCK
+   ⚫ A rushed sell into a dip  →  RISK_VETO
+   ⚫ A malformed order (zero quantity)  →  GUARDRAIL_BLOCK
+   ⚪ A second, disciplined tiny tranche  →  COMMITTEE_CONCURS
 

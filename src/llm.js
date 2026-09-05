@@ -19,27 +19,41 @@ export class LLMClient {
 
   async decide(persona, evidence) {
     const userPrompt = buildEvidencePrompt(evidence, { requireVeto: !!persona.veto });
-    const res = await fetch(`${this.baseUrl}/chat/completions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(this.apiKey ? { Authorization: `Bearer ${this.apiKey}` } : {}),
-      },
-      body: JSON.stringify({
-        model: this.model,
-        temperature: 0.2,
-        response_format: { type: "json_object" },
-        messages: [
-          { role: "system", content: persona.systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-      }),
+    const body = JSON.stringify({
+      model: this.model,
+      temperature: 0.2,
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: persona.systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
     });
-    if (!res.ok) throw new Error(`LLM ${res.status}: ${await res.text().catch(() => "")}`);
-    const data = await res.json();
-    const content = data?.choices?.[0]?.message?.content ?? "";
-    const verdict = parseVerdict(content);
-    return { ...verdict, model: this.model, raw: content };
+    // Retry with backoff on rate limits (429) / transient 5xx so a burst of
+    // committee calls rides through free-tier RPM caps instead of failing.
+    const maxAttempts = 4;
+    let lastErr;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const res = await fetch(`${this.baseUrl}/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(this.apiKey ? { Authorization: `Bearer ${this.apiKey}` } : {}),
+        },
+        body,
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const content = data?.choices?.[0]?.message?.content ?? "";
+        const verdict = parseVerdict(content);
+        return { ...verdict, model: this.model, raw: content };
+      }
+      lastErr = new Error(`LLM ${res.status}: ${(await res.text().catch(() => "")).slice(0, 120)}`);
+      const retryable = res.status === 429 || res.status >= 500;
+      if (!retryable || attempt === maxAttempts - 1) throw lastErr;
+      const waitMs = 2500 * (attempt + 1); // 2.5s, 5s, 7.5s
+      await new Promise((r) => setTimeout(r, waitMs));
+    }
+    throw lastErr;
   }
 }
 
