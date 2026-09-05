@@ -1,0 +1,32 @@
+{
+  "name": "conclave-agent",
+  "version": "0.1.0",
+  "description": "Conclave — three agents, locked room, one verdict. A multi-agent investment committee for Binance Agent OS. No trade without white smoke.",
+  "type": "module",
+  "main": "src/committee.js",
+  "scripts": {
+    "demo": "node demo/run.js",
+    "chat": "node src/chat.js",
+    "test": "node --test test/",
+    "deploy:chain": "node scripts/deploy.mjs",
+    "verify:ballots": "node scripts/verify-ballots.mjs"
+  },
+  "keywords": [
+    "binance",
+    "agent-os",
+    "mcp",
+    "trading",
+    "multi-agent",
+    "ai-agent",
+    "hackathon"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "optionalDependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "ethers": "^6.17.0",
+    "solc": "^0.8.36"
+  }
+}
