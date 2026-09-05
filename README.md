@@ -2,6 +2,11 @@
   <img src="assets/logo.svg" width="140" alt="Conclave logo" />
 </p>
 
+<p align="center">
+  <a href="https://github.com/Arinzaay007/conclave-agent/actions/workflows/ci.yml"><img src="https://github.com/Arinzaay007/conclave-agent/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/Arinzaay007/conclave-agent/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="license: MIT"></a>
+</p>
+
 # Conclave
 
 **Three agents, locked room, one verdict. No trade without white smoke.**
