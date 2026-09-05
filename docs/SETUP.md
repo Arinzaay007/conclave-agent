@@ -5,7 +5,7 @@ Everything that needs *your* accounts/keys. Run from the repo root.
 ## 0. Sanity (no accounts)
 ```bash
 node --version            # >= 20
-npm run demo              # deterministic 3-scenario session, offline
+npm run demo              # deterministic six-scenario session, offline
 npm test                  # 24 tests, all green, zero deps installed
 ```
 

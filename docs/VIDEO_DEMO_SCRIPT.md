@@ -1,23 +1,33 @@
-# Conclave — 90-second demo video script
+# Conclave — demo video script (extended, ~2.5–3 min)
 
-**Format:** terminal recording + voiceover. No slides. Everything shown is real
-output from `npm run demo` (dry-run, zero funds touched).
+**Format:** terminal recording. Run `npm run demo:llm` (real LLM debate) or
+`npm run demo` (deterministic rules). Dry-run — zero funds touched. The demo
+now plays six scenarios and prints its own sealed-ballot audit trail + summary,
+so one continuous command fills the whole video.
 
-| Time | Visual | Voiceover |
+**Recording:** clear with `cls`, start capture (`Win + G` → ●), run
+`npm run demo:llm`, let it run to the final SUMMARY, stop.
+
+| Time | On screen | What to say |
 |---|---|---|
-| 0:00–0:08 | Title card: **CONCLAVE — three agents, locked room, one verdict.** | "An AI trading agent shouldn't be a single black box. On Binance Agent OS, we built a committee." |
-| 0:08–0:22 | Scenario 1: small BTC dip buy. Guardrails pass → Bull GO, Quant GO, Risk GO → **⚪ WHITE SMOKE** → simulated order with id. | "A disciplined dip buy: the guardrails pass, the Bull likes the oversold bounce, the Quant likes the entry zone, and Risk approves the size. White smoke — the order goes to the human for confirmation." |
-| 0:22–0:40 | Scenario 2: PEPE FOMO. 🚫 `SYMBOL_NOT_ALLOWED` → **⚫ BLACK SMOKE**. Note "personas never convened." | "Now the classic FOMO trade. It never even reaches the agents — the deterministic guardrails hard-block anything off the allowlist. The model can't argue with code." |
-| 0:40–0:58 | Scenario 3: oversized SOL. Bull GO, Quant NO-GO, Risk **VETO** → **⚫ BLACK SMOKE (RISK_VETO)**. | "A breakout the Bull loves and the Quant hates — and the Risk Officer vetoes regardless: it's 37% of the account. Risk cannot be outvoted." |
-| 0:58–1:12 | `cat ballots/ballots.jsonl` — sealed hashes; show hash matches revealed ballot. | "Every vote is hashed and committed *before* the verdict exists — sealed ballots, revealed later. In live mode these hashes go to BSC testnet before the order fires. You can reconstruct every decision." |
-| 1:12–1:20 | **Live BscScan** — the `BallotSealed` events for the three ballots, then `verify:ballots` printing ✅ ON-CHAIN for each. | "And those ballots are real: each hash is committed to BSC testnet *before* the trade exists. A verifier recomputes and checks them on-chain." |
-| 1:20–1:30 | Closing card: safety checklist (no withdrawal scope · human confirm · dry-run default · risk veto) + GitHub URL. | "No withdrawal scope, human confirmation on every order, dry-run by default, and a Risk Officer with a veto. Conclave: three agents, locked room, one verdict." |
+| 0:00–0:12 | Banner: **CONCLAVE — three agents, locked room, one verdict.** | "An AI trading agent shouldn't be one black box. Conclave runs three agents on Binance Agent OS — a Bull, a Quant, and a Risk Officer with a veto. Nothing trades unless they agree." |
+| 0:12–0:32 | Scenario 1: small BTC dip buy → three GO votes → **⚪ WHITE SMOKE** → simulated order. | "A small, disciplined dip buy. The guardrails pass, all three agents vote GO. White smoke — and the order still goes to the human for confirmation before anything executes." |
+| 0:32–0:48 | Scenario 2: PEPE FOMO → 🚫 `SYMBOL_NOT_ALLOWED` → **⚫ GUARDRAIL_BLOCK**. | "The classic memecoin FOMO trade. It never even reaches the agents — code-level guardrails block anything off the allowlist. The model can't argue with hard limits." |
+| 0:48–1:08 | Scenario 3: oversized SOL → Bull GO, Quant NO-GO, Risk **VETO** → **⚫ RISK_VETO**. | "A breakout the Bull loves and the Quant hates — and the Risk Officer vetoes it outright at 37% of the account. Risk cannot be outvoted." |
+| 1:08–1:24 | Scenario 4: mid-range ETH, no edge → mixed votes → **⚫ NOT_UNANIMOUS**. | "A nothing-burger trade where the agents disagree. No consensus, no trade — the committee is allowed to just say 'do nothing.'" |
+| 1:24–1:38 | Scenario 5: small BNB diversification → reviewed, denied. | "Even a small altcoin buy has to clear all three — capital protection over activity." |
+| 1:38–1:54 | Scenario 6: 1 BTC, over the cap → 🚫 **⚫ GUARDRAIL_BLOCK (notional cap)**. | "And an order past the per-trade size cap is rejected by the guardrails before any AI is consulted." |
+| 1:54–2:20 | **SEALED-BALLOT AUDIT TRAIL** block: 12 ballots, each ✅ with a `0x…` hash, "every ballot matches its pre-verdict seal: YES". | "Here's the part I care about: every single vote is hash-committed *before* the verdict exists, then revealed and verified. On a real deployment those hashes are committed to BSC testnet before the order fires — so anyone can reconstruct why each trade did or didn't happen." |
+| 2:20–2:40 | SUMMARY block: six verdicts listed with reasons. | "Six proposals — one approved, five blocked, each with a clear reason. The design goal: an AI that's useful but structurally unable to do something reckless." |
+| 2:40–2:55 | Closing: repo URL. | "No withdrawal scope, human confirmation on every order, fail-closed AI, dry-run by default. Conclave — three agents, locked room, one verdict. Repo and demo are open source." |
 
-## Recording notes
-- Terminal at ~72-char width for clean banner; record `npm run chat` for an
-  interactive feel (type "buy 0.002 btc" live) or `npm run demo` for the
-  deterministic three-scenario run.
-- `npm run demo` is deterministic (fixtures) — safe to record take after take.
-- The `verify:ballots` + BscScan event view is the "trust it" money shot; the
-  `0x…` hashes in `ballots/` are the local equivalent if not deployed yet.
-- Total runtime target ~90–100s.
+## Notes
+- `npm run demo:llm` shows the **real** Groq debate (`[llm:openai/gpt-oss-120b]`)
+  but wording/votes vary run to run; scenario 5 may flip to a veto — that's
+  fine, just describe what's on screen.
+- `npm run demo` (rules) is fully deterministic — same verdicts every take, and
+  always ends with scenario 1 white smoke.
+- The audit-trail + summary sections print automatically — no extra commands.
+- Terminal width ~72 chars renders the banner cleanly; maximize the window.
+- Runtime ~2.5–3 min. If you prefer a tight 90s cut, show scenarios 1, 2, 3 and
+  the audit-trail block only.

@@ -1,12 +1,18 @@
 #!/usr/bin/env node
 /**
- * Conclave demo runner — three scenarios, no keys required.
- *   npm run demo
+ * Conclave demo runner — six scenarios, no funds touched.
+ *   npm run demo       (deterministic rule personas)
+ *   npm run demo:llm   (real LLM personas via .env)
  *
- *  1. Disciplined buy  : BTC dip      -> committee concurs  -> WHITE SMOKE
- *  2. Memecoin chase   : PEPE FOMO    -> guardrail + veto   -> BLACK SMOKE
- *  3. Oversized chase  : SOL too big  -> Risk veto          -> BLACK SMOKE
+ *  1. Disciplined small BTC dip buy -> committee concurs -> WHITE SMOKE
+ *  2. Memecoin FOMO (PEPE)          -> guardrail block (no debate)
+ *  3. Oversized SOL chase           -> Risk veto
+ *  4. Mid-range ETH, no edge        -> not unanimous -> no trade
+ *  5. Small BNB buy                  -> committee reviews size
+ *  6. Trade over the notional cap    -> guardrail block ($ cap)
+ *  Then: sealed-ballot audit trail summary.
  */
+import fs from "node:fs";
 import { convene } from "../src/committee.js";
 import { DryRunExecutor } from "../src/mcp.js";
 import { CONFIG } from "../src/config.js";
@@ -27,6 +33,18 @@ const SCENARIOS = [
     title: "Scenario 3 — The oversized chase",
     proposal: { side: "BUY", symbol: "SOL", quantity: 2.5, rationale: "SOL breaking out, load up" },
   },
+  {
+    title: "Scenario 4 — A mid-range trade with no edge",
+    proposal: { side: "BUY", symbol: "ETH", quantity: 0.05, rationale: "ETH looks fine, maybe buy" },
+  },
+  {
+    title: "Scenario 5 — A small, uneventful alt buy",
+    proposal: { side: "BUY", symbol: "BNB", quantity: 0.2, rationale: "diversify with a little BNB" },
+  },
+  {
+    title: "Scenario 6 — A trade that blows past the size cap",
+    proposal: { side: "BUY", symbol: "BTC", quantity: 1, rationale: "go big on BTC" },
+  },
 ];
 
 const line = "─".repeat(72);
@@ -35,9 +53,10 @@ async function main() {
   console.log(`\n${"=".repeat(72)}
    CONCLAVE — three agents, locked room, one verdict.
    Binance Agent OS Mini Hackathon · Track A
-   mode: ${CONFIG.DRY_RUN ? "DRY RUN (no funds touched)" : "LIVE"}
+   mode: ${CONFIG.DRY_RUN ? "DRY RUN (no funds touched)" : "LIVE"} · personas: ${CONFIG.LLM_MODE}
 ${"=".repeat(72)}\n`);
 
+  const outcomes = [];
   for (const s of SCENARIOS) {
     console.log(line);
     console.log(`  ${s.title}`);
@@ -45,7 +64,6 @@ ${"=".repeat(72)}\n`);
     console.log(line);
 
     const v = await convene(s.proposal, ACCOUNT, { dryRun: true, executor });
-
     for (const t of v.trace) console.log(`   ${t}`);
 
     console.log("");
@@ -56,12 +74,33 @@ ${"=".repeat(72)}\n`);
       console.log(`   ⚫ BLACK SMOKE — no trade. (${v.reason})`);
     }
     console.log("");
+    outcomes.push({ title: s.title, smoke: v.smoke, reason: v.reason });
   }
 
-  console.log(`${"=".repeat(72)}
-   Sealed ballots written to ./ballots/ (commit-reveal audit trail).
-   In live mode the ballot hashes are emitted to BSC testnet before the order.
-${"=".repeat(72)}\n`);
+  // ── Audit trail summary ────────────────────────────────────────────────
+  console.log("=".repeat(72));
+  console.log("   SEALED-BALLOT AUDIT TRAIL (commit–reveal)");
+  console.log("=".repeat(72));
+  try {
+    const reveals = fs.readFileSync(`${CONFIG.ATTEST_DIR}/reveals.jsonl`, "utf8").trim().split("\n").map(JSON.parse);
+    console.log(`   ballots sealed & revealed: ${reveals.length}`);
+    for (const r of reveals.slice(0, 6)) {
+      console.log(`   ${r.verified ? "✅" : "❌"} ${r.ballot.persona.padEnd(6)} ${r.sealed.hash.slice(0, 22)}…  vote=${r.ballot.decision.vote}`);
+    }
+    if (reveals.length > 6) console.log(`   …and ${reveals.length - 6} more`);
+    const allVerified = reveals.every((r) => r.verified);
+    console.log(`   every revealed ballot matches its pre-verdict seal: ${allVerified ? "YES ✅" : "NO ❌"}`);
+  } catch {
+    console.log("   (no ballot file found)");
+  }
+  console.log("\n   In live mode these seal hashes are emitted to BSC testnet BEFORE");
+  console.log("   the order, so every decision is independently reconstructable.\n");
+
+  console.log("=".repeat(72));
+  console.log("   SUMMARY");
+  console.log("=".repeat(72));
+  for (const o of outcomes) console.log(`   ${o.smoke === "WHITE_SMOKE" ? "⚪" : "⚫"} ${o.title.replace(/Scenario \d+ — /, "")}  →  ${o.reason}`);
+  console.log("");
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

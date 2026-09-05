@@ -2,7 +2,7 @@
 ========================================================================
    CONCLAVE — three agents, locked room, one verdict.
    Binance Agent OS Mini Hackathon · Track A
-   mode: DRY RUN (no funds touched)
+   mode: DRY RUN (no funds touched) · personas: llm
 ========================================================================
 
 ────────────────────────────────────────────────────────────────────────
@@ -11,13 +11,13 @@
 ────────────────────────────────────────────────────────────────────────
    evidence: BTC @ $64200 | RSI 31 | 24h -4.2% | vol 2.8% | spread 3 bps (fixture)
    guardrails passed: $25.68 notional, 4 checks
-   🐂 The Bull [llm:openai/gpt-oss-120b]: GO (65%) — RSI near oversold and a modest 4% pullback suggest a bounce opportunity with low risk and tight spread
-   📊 The Quant [llm:openai/gpt-oss-120b]: GO (70%) — RSI near oversold, low spread, modest size and acceptable volatility make this a prudent entry
-   🛡️ The Risk Officer [llm:openai/gpt-oss-120b]: GO (80%) — Trade size is modest (2.6% of balance) and liquidity is sufficient, posing minimal risk to capital
-   order: SIMULATED BUY 0.0004 BTC (DRY_RUN) id=sim_169da3b018a2
+   🐂 The Bull [llm:openai/gpt-oss-120b]: GO (70%) — RSI at 31 signals oversold conditions and a 4% pullback on modest volatility, making a small 2.6%‑of‑balance buy a high‑upside, low‑risk entry.
+   📊 The Quant [llm:openai/gpt-oss-120b]: GO (70%) — RSI near oversold, low spread, moderate volatility and small position size make it a prudent entry
+   🛡️ The Risk Officer [llm:openai/gpt-oss-120b]: GO (85%) — Trade size is modest (2.6% of balance) with acceptable liquidity and volatility, aligning with capital preservation goals
+   order: SIMULATED BUY 0.0004 BTC (DRY_RUN) id=sim_832c8408a24f
 
    ⚪ WHITE SMOKE — the committee concurs. Order presented for human confirmation.
-      → SIMULATED: BUY 0.0004 BTC (~$25.68) [sim_169da3b018a2]
+      → SIMULATED: BUY 0.0004 BTC (~$25.68) [sim_832c8408a24f]
 
 ────────────────────────────────────────────────────────────────────────
   Scenario 2 — The memecoin FOMO
@@ -34,14 +34,68 @@
 ────────────────────────────────────────────────────────────────────────
    evidence: SOL @ $148 | RSI 72 | 24h 6.8% | vol 5.9% | spread 12 bps (fixture)
    guardrails passed: $370.00 notional, 4 checks
-   🐂 The Bull [llm:openai/gpt-oss-120b]: GO (65%) — The 6.8% 24h rally and breakout momentum justify a buy despite the overbought RSI, though the 37% position size is sizable.
-   📊 The Quant [llm:openai/gpt-oss-120b]: NO-GO (80%) — RSI 72 indicates overbought conditions and the trade size is too large for the current volatility
-   🛡️ The Risk Officer [llm:openai/gpt-oss-120b]: NO-GO (80%) — The trade uses 37% of the account on a single, overbought asset, posing excessive capital risk
+   🐂 The Bull [llm:openai/gpt-oss-120b]: GO (65%) — Strong 6.8% 24h gain and low spread indicate breakout momentum despite a high RSI, though the large 37% position size adds risk.
+   📊 The Quant [llm:openai/gpt-oss-120b]: NO-GO (85%) — RSI is overbought at 72, spread is moderate, and the trade size is too large for a potentially overheated breakout
+   🛡️ The Risk Officer [llm:openai/gpt-oss-120b]: NO-GO (80%) — Trade size of 37% of balance and overbought RSI pose excessive capital risk
 
    ⚫ BLACK SMOKE — no trade. (RISK_VETO)
 
+────────────────────────────────────────────────────────────────────────
+  Scenario 4 — A mid-range trade with no edge
+  proposal: BUY 0.05 ETH — "ETH looks fine, maybe buy"
+────────────────────────────────────────────────────────────────────────
+   evidence: ETH @ $3050 | RSI 48 | 24h -0.6% | vol 3.4% | spread 5 bps (fixture)
+   guardrails passed: $152.50 notional, 4 checks
+   🐂 The Bull [llm:openai/gpt-oss-120b]: NO-GO (70%) — ETH shows neutral RSI, slight 24h decline and no breakout or oversold signal, offering insufficient upside for a buy
+   📊 The Quant [llm:openai/gpt-oss-120b]: NO-GO (80%) — Trade size of 15% of balance is too large relative to the 3.4% 24h volatility
+   🛡️ The Risk Officer [llm:openai/gpt-oss-120b]: NO-GO (80%) — The trade uses over 15% of the small $1,000 balance with weak justification, posing undue capital risk
+
+   ⚫ BLACK SMOKE — no trade. (RISK_VETO)
+
+────────────────────────────────────────────────────────────────────────
+  Scenario 5 — A small, uneventful alt buy
+  proposal: BUY 0.2 BNB — "diversify with a little BNB"
+────────────────────────────────────────────────────────────────────────
+   evidence: BNB @ $604 | RSI 55 | 24h 1.2% | vol 2.1% | spread 6 bps (fixture)
+   guardrails passed: $120.80 notional, 4 checks
+   🐂 The Bull [llm:openai/gpt-oss-120b]: NO-GO (70%) — Modest 1.2% rise, neutral RSI, and low volatility offer limited upside for a 12% position size
+   📊 The Quant [llm:openai/gpt-oss-120b]: GO (80%) — RSI neutral, low volatility, acceptable spread, and position size aligns with risk limits
+   🛡️ The Risk Officer [llm:openai/gpt-oss-120b]: GO (70%) — Trade size is moderate (12% of balance) and liquidity is sufficient, fitting the diversification goal
+
+   ⚫ BLACK SMOKE — no trade. (NOT_UNANIMOUS)
+
+────────────────────────────────────────────────────────────────────────
+  Scenario 6 — A trade that blows past the size cap
+  proposal: BUY 1 BTC — "go big on BTC"
+────────────────────────────────────────────────────────────────────────
+   evidence: BTC @ $64200 | RSI 31 | 24h -4.2% | vol 2.8% | spread 3 bps (fixture)
+   🚫 guardrail NOTIONAL_CAP: $64200.00 exceeds the $500 per-trade cap
+
+   ⚫ BLACK SMOKE — no trade. (GUARDRAIL_BLOCK)
+
 ========================================================================
-   Sealed ballots written to ./ballots/ (commit-reveal audit trail).
-   In live mode the ballot hashes are emitted to BSC testnet before the order.
+   SEALED-BALLOT AUDIT TRAIL (commit–reveal)
 ========================================================================
+   ballots sealed & revealed: 24
+   ✅ bull   0x237786a1541b4182ae16…  vote=GO
+   ✅ quant  0x3f35fed69a9a07371d05…  vote=GO
+   ✅ risk   0x6083841f62232f984ff9…  vote=GO
+   ✅ bull   0x14e1b457bfeaba8d2927…  vote=GO
+   ✅ quant  0xf3a32544e68f4f601031…  vote=NO-GO
+   ✅ risk   0x326168659dc3d6515a1c…  vote=NO-GO
+   …and 18 more
+   every revealed ballot matches its pre-verdict seal: YES ✅
+
+   In live mode these seal hashes are emitted to BSC testnet BEFORE
+   the order, so every decision is independently reconstructable.
+
+========================================================================
+   SUMMARY
+========================================================================
+   ⚪ A disciplined dip buy (small size)  →  COMMITTEE_CONCURS
+   ⚫ The memecoin FOMO  →  GUARDRAIL_BLOCK
+   ⚫ The oversized chase  →  RISK_VETO
+   ⚫ A mid-range trade with no edge  →  RISK_VETO
+   ⚫ A small, uneventful alt buy  →  NOT_UNANIMOUS
+   ⚫ A trade that blows past the size cap  →  GUARDRAIL_BLOCK
 
