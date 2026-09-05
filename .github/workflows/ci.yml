@@ -20,6 +20,6 @@ jobs:
       - name: Run demo (no deps)
         run: node demo/run.js > /tmp/demo.out && grep -q "WHITE SMOKE" /tmp/demo.out
       - name: Run tests (no deps)
-        run: node --test test/
+        run: npm test
       - name: Install full deps and re-test
-        run: npm install && node --test test/
+        run: npm install && npm test

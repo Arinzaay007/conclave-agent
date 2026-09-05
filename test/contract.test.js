@@ -2,17 +2,19 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { createRequire } from "node:module";
+import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const sourcePath = path.join(here, "..", "contracts", "BallotEmitter.sol");
 
+// solc is CommonJS and an optional dev dependency — load via createRequire so
+// it works in both ESM and zero-dep (skip) environments.
 let solc = null;
 try {
-  const mod = await import(pathToFileURL(path.join(here, "..", "node_modules", "solc", "index.js")).href);
-  solc = mod.default ?? mod;
+  solc = createRequire(import.meta.url)("solc");
 } catch {
-  solc = null; // optional dependency absent in zero-dep mode
+  solc = null;
 }
 
 const fn = solc ? test : test.skip;

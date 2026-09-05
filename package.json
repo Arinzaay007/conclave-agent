@@ -7,7 +7,7 @@
   "scripts": {
     "demo": "node demo/run.js",
     "chat": "node src/chat.js",
-    "test": "node --test test/",
+    "test": "node --test test/*.test.js",
     "deploy:chain": "node scripts/deploy.mjs",
     "verify:ballots": "node scripts/verify-ballots.mjs"
   },
