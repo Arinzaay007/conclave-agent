@@ -111,6 +111,15 @@ export BINANCE_MCP_URL="https://agent.binance.com/mcp/agentic"
 # connect through a supported client (Claude / Cursor / Codex) with spot + account scopes
 ```
 
+## Use it as a Binance Skill
+
+Conclave also ships as a ready-to-install **Binance Skills Hub** skill —
+[`skill/conclave-committee-review/SKILL.md`](skill/conclave-committee-review/SKILL.md).
+Drop it into any MCP/Skills-compatible agent (Claude Code, OpenClaw, etc.) and
+it runs the committee review before every Binance trade. Contribute it upstream
+by opening a PR to [binance/binance-skills-hub](https://github.com/binance/binance-skills-hub)
+(new folder under `skills/`).
+
 ## How it works
 
 See [`docs/HOW_IT_WORKS.md`](docs/HOW_IT_WORKS.md) for the full walkthrough,
