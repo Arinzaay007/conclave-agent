@@ -72,7 +72,7 @@ npm run verify:ballots          # recomputes hashes + confirms on-chain anchors
 ```bash
 # zero runtime dependencies — node >= 20, no npm install needed for the core
 npm run demo       # scripted 3-scenario committee session, no keys, no network
-npm test           # 16 tests covering all verdicts, LLM fail-closed, anchoring
+npm test           # 20 tests covering all verdicts, LLM fail-closed, anchoring
 npm run chat       # interactive: type "buy 0.002 btc", watch the debate, confirm
 ```
 

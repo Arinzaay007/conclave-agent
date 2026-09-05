@@ -1,0 +1,47 @@
+
+========================================================================
+   CONCLAVE — three agents, locked room, one verdict.
+   Binance Agent OS Mini Hackathon · Track A
+   mode: DRY RUN (no funds touched)
+========================================================================
+
+────────────────────────────────────────────────────────────────────────
+  Scenario 1 — A disciplined dip buy (small size)
+  proposal: BUY 0.002 BTC — "BTC pulled back 4%, RSI oversold; small tranche"
+────────────────────────────────────────────────────────────────────────
+   evidence: BTC @ $64200 | RSI 31 | 24h -4.2% | vol 2.8% | spread 3 bps (fixture)
+   guardrails passed: $128.40 notional, 4 checks
+   🐂 The Bull [rules]: GO (72%) — RSI 31 says deeply oversold — mean-reversion bounce setup, buy the fear.
+   📊 The Quant [rules]: GO (68%) — RSI 31 with controlled vol 2.8% — statistically favorable entry zone.
+   🛡️ The Risk Officer [rules]: GO (70%) — Size is 12.8% of balance, liquidity acceptable, risk within mandate.
+   order: SIMULATED BUY 0.002 BTC (DRY_RUN) id=sim_ac63c1d19ece
+
+   ⚪ WHITE SMOKE — the committee concurs. Order presented for human confirmation.
+      → SIMULATED: BUY 0.002 BTC (~$128.40) [sim_ac63c1d19ece]
+
+────────────────────────────────────────────────────────────────────────
+  Scenario 2 — The memecoin FOMO
+  proposal: BUY 20000000 PEPE — "PEPE is up 41%, everyone says moon"
+────────────────────────────────────────────────────────────────────────
+   evidence: PEPE @ $0.0000118 | RSI 88 | 24h 41.0% | vol 22.0% | spread 85 bps (fixture)
+   🚫 guardrail SYMBOL_NOT_ALLOWED: PEPE is not on the allowlist (BTC, ETH, BNB, SOL, USDC, USDT)
+
+   ⚫ BLACK SMOKE — no trade. (GUARDRAIL_BLOCK)
+
+────────────────────────────────────────────────────────────────────────
+  Scenario 3 — The oversized chase
+  proposal: BUY 2.5 SOL — "SOL breaking out, load up"
+────────────────────────────────────────────────────────────────────────
+   evidence: SOL @ $148 | RSI 72 | 24h 6.8% | vol 5.9% | spread 12 bps (fixture)
+   guardrails passed: $370.00 notional, 4 checks
+   🐂 The Bull [rules]: GO (65%) — +6.8% on 24h with room before overbought — momentum is on.
+   📊 The Quant [rules]: NO-GO (70%) — RSI 72 is overbought; expected forward return at this level is poor.
+   🛡️ The Risk Officer [rules]: NO-GO (92%) — This trade is 37% of the spot balance — concentration risk. VETO.
+
+   ⚫ BLACK SMOKE — no trade. (RISK_VETO)
+
+========================================================================
+   Sealed ballots written to ./ballots/ (commit-reveal audit trail).
+   In live mode the ballot hashes are emitted to BSC testnet before the order.
+========================================================================
+

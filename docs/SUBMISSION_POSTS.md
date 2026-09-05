@@ -21,7 +21,7 @@ An AI trade shouldn't be one black box. On #BinanceAgentOS I built a multi-agent
 ⚪ ⚫ White smoke = human confirms → order; black smoke = no trade
 🔏 Every vote sealed (hash) BEFORE the verdict, anchored on BSC testnet
 
-No withdrawal scope · human confirm · dry-run by default · 16 tests
+No withdrawal scope · human confirm · dry-run by default · 20 tests
 
 🎥 demo: <VIDEO_URL>
 💻 repo: <GH_URL>
@@ -86,7 +86,7 @@ verifiable on-chain.
 
 **Tech:** Node.js, Model Context Protocol (Streamable HTTP) over Agent OS,
 OpenAI-compatible LLM layer with fail-closed validation, ethers/solc for BSC
-testnet attestation. Zero-dependency core; 16 tests; runs offline in dry-run.
+testnet attestation. Zero-dependency core; 20 tests; runs offline in dry-run.
 
 **Repo:** <GH_URL>  ·  **Demo:** <VIDEO_URL>
 

@@ -6,7 +6,7 @@ Everything that needs *your* accounts/keys. Run from the repo root.
 ```bash
 node --version            # >= 20
 npm run demo              # deterministic 3-scenario session, offline
-npm test                  # 17 tests, all green, zero deps installed
+npm test                  # 20 tests, all green, zero deps installed
 ```
 
 ## 1. Push to GitHub
