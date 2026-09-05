@@ -42,7 +42,18 @@ async function main() {
       waiters.push(resolve);
     });
 
-  const executor = CONFIG.DRY_RUN ? new DryRunExecutor() : new LiveMcpExecutor();
+  // Live: one shared Agent OS MCP client feeds both data (quote/account) and
+  // order execution. Dry-run: simulated executor + default account.
+  let mcpClient = null;
+  let executor;
+  if (CONFIG.DRY_RUN) {
+    executor = new DryRunExecutor();
+  } else {
+    const { BinanceMcpClient } = await import("./binance-mcp.js");
+    mcpClient = await new BinanceMcpClient().connect();
+    executor = new LiveMcpExecutor({ mcpClient });
+    console.log("   connected to Agent OS MCP.");
+  }
   const account = { spotBalanceUsd: 1000 };
 
   // Human confirmation gate (only reached on white smoke).
@@ -64,7 +75,7 @@ async function main() {
     const parsed = parseProposal(line);
     if (!parsed.ok) { console.log(`   ${parsed.error}`); continue; }
 
-    const v = await convene(parsed.proposal, account, { dryRun: CONFIG.DRY_RUN, executor, confirmOrder });
+    const v = await convene(parsed.proposal, account, { dryRun: CONFIG.DRY_RUN, executor, confirmOrder, mcpClient });
     console.log("");
     for (const t of v.trace) console.log(`   ${t}`);
     console.log("");

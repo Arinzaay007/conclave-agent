@@ -17,8 +17,9 @@ import { PERSONAS } from "./personas.js";
 import { sealBallot, revealBallot } from "./ballots.js";
 import { LLMClient } from "./llm.js";
 import { createChainSealer } from "./chain.js";
+import { getQuoteViaMcp, getAccountViaMcp } from "./agentos-data.js";
 
-export async function convene(proposal, account, { dryRun = CONFIG.DRY_RUN, executor, llm, chainSealer, confirmOrder } = {}) {
+export async function convene(proposal, account, { dryRun = CONFIG.DRY_RUN, executor, llm, chainSealer, confirmOrder, mcpClient } = {}) {
   const opts = { confirmOrder };
   const trace = [];
   const log = (msg) => trace.push(msg);
@@ -28,7 +29,23 @@ export async function convene(proposal, account, { dryRun = CONFIG.DRY_RUN, exec
   const client = llm === undefined ? new LLMClient() : llm;
   const useLLM = CONFIG.LLM_MODE === "llm" || (CONFIG.LLM_MODE === "auto" && client?.enabled);
 
-  const quote = await getQuote(proposal.symbol, { dryRun });
+  // Live data: prefer the Agent OS MCP server (tool names confirmed via
+  // scripts/check-agentos.mjs); fall back to public REST / fixtures on failure.
+  let quote;
+  if (!dryRun && mcpClient) {
+    try {
+      quote = await getQuoteViaMcp(mcpClient, proposal.symbol);
+    } catch (err) {
+      log(`⚠️ Agent OS market-data unavailable (${String(err.message).slice(0, 70)}); falling back`);
+      quote = await getQuote(proposal.symbol, { dryRun: false });
+    }
+    try {
+      const acc = await getAccountViaMcp(mcpClient);
+      if (acc.spotBalanceUsd) account = { spotBalanceUsd: acc.spotBalanceUsd };
+    } catch { /* keep provided account */ }
+  } else {
+    quote = await getQuote(proposal.symbol, { dryRun });
+  }
   log(`evidence: ${quote.symbol} @ $${quote.price} | RSI ${quote.rsi14.toFixed(0)} | 24h ${quote.change24hPct.toFixed(1)}% | vol ${quote.volatility24hPct.toFixed(1)}% | spread ${quote.spreadBps} bps (${quote.source})`);
 
   // ── 1. Guardrails ──────────────────────────────────────────────

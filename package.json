@@ -11,7 +11,8 @@
     "chat:llm": "node --env-file=.env src/chat.js",
     "test": "node --test test/*.test.js",
     "deploy:chain": "node scripts/deploy.mjs",
-    "verify:ballots": "node scripts/verify-ballots.mjs"
+    "verify:ballots": "node scripts/verify-ballots.mjs",
+    "check:agentos": "node scripts/check-agentos.mjs"
   },
   "keywords": [
     "binance",

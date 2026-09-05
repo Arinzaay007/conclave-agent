@@ -44,13 +44,12 @@ export class LiveMcpExecutor {
 
   async execute(proposal, ctx) {
     const mcp = await this._client();
-    // NOTE: the exact tool name is discovered at runtime; "order" matches the
-    // spot order tool on the Agent OS server regardless of version naming.
-    const { tool, result } = await mcp.callToolMatching("order", {
-      symbol: proposal.symbol.toUpperCase() + "USDT",
-      side: (proposal.side || "BUY").toUpperCase(),
+    // Tool name discovered at runtime; Agent OS enforces its own human
+    // confirmation in the connected client. No withdrawal scope exists.
+    const { tool, payload } = await mcp.placeSpotOrder({
+      symbol: proposal.symbol.toUpperCase(),
+      side: proposal.side || "BUY",
       quantity: proposal.quantity,
-      type: "MARKET",
     });
     return {
       status: "LIVE_ORDER_PLACED",
@@ -60,7 +59,7 @@ export class LiveMcpExecutor {
       symbol: proposal.symbol.toUpperCase(),
       quantity: proposal.quantity,
       notionalUsd: ctx.notionalUsd,
-      result,
+      result: payload,
     };
   }
 }

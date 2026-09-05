@@ -6,7 +6,7 @@ Everything that needs *your* accounts/keys. Run from the repo root.
 ```bash
 node --version            # >= 20
 npm run demo              # deterministic 3-scenario session, offline
-npm test                  # 20 tests, all green, zero deps installed
+npm test                  # 24 tests, all green, zero deps installed
 ```
 
 ## 1. Push to GitHub
@@ -43,16 +43,24 @@ npm run verify:ballots                     # ✅ ON-CHAIN for each ballot
 Open the printed `testnet.bscscan.com/address/…` to show `BallotSealed` events
 in the video.
 
-## 4. (Optional) Live Agent OS orders
+## 4. (Optional) Live Agent OS integration
 Connect Claude / Cursor / Codex to Agent OS per Binance's MCP docs and grab the
-OAuth bearer token:
+OAuth bearer token, then verify the connection (lists tools + read-only probes,
+never trades):
 ```bash
-export DRY_RUN=false
 export BINANCE_MCP_URL="https://agent.binance.com/mcp/agentic"
 export BINANCE_MCP_TOKEN="..."            # from the Agent OS connect flow
-npm run chat                              # white smoke → confirm → real spot order
+npm run check:agentos                     # prints the real tool names/shapes
 ```
-Fund only a small Agentic sub-account; it has no withdrawal scope.
+In live mode, market data, account balance AND orders all flow through the
+Agent OS MCP server (`src/binance-mcp.js`, `src/agentos-data.js`):
+```bash
+DRY_RUN=false BINANCE_MCP_TOKEN="..." npm run chat   # white smoke → confirm → spot order
+```
+If a tool name/shape differs from expectations, `check:agentos` reveals it; the
+data adapter matches by keyword and parses defensively, and any data failure
+falls back to public REST/fixtures rather than crashing. Fund only a small
+Agentic sub-account; it has no withdrawal scope.
 
 ## 5. Record & submit
 - Record per `docs/VIDEO_DEMO_SCRIPT.md` (~90s), upload → `<VIDEO_URL>`.
