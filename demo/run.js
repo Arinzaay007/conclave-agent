@@ -17,7 +17,7 @@ const executor = new DryRunExecutor();
 const SCENARIOS = [
   {
     title: "Scenario 1 — A disciplined dip buy (small size)",
-    proposal: { side: "BUY", symbol: "BTC", quantity: 0.002, rationale: "BTC pulled back 4%, RSI oversold; small tranche" },
+    proposal: { side: "BUY", symbol: "BTC", quantity: 0.0004, rationale: "BTC pulled back 4%, RSI oversold; small tranche" },
   },
   {
     title: "Scenario 2 — The memecoin FOMO",

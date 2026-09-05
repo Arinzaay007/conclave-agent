@@ -1,0 +1,47 @@
+
+========================================================================
+   CONCLAVE — three agents, locked room, one verdict.
+   Binance Agent OS Mini Hackathon · Track A
+   mode: DRY RUN (no funds touched)
+========================================================================
+
+────────────────────────────────────────────────────────────────────────
+  Scenario 1 — A disciplined dip buy (small size)
+  proposal: BUY 0.0004 BTC — "BTC pulled back 4%, RSI oversold; small tranche"
+────────────────────────────────────────────────────────────────────────
+   evidence: BTC @ $64200 | RSI 31 | 24h -4.2% | vol 2.8% | spread 3 bps (fixture)
+   guardrails passed: $25.68 notional, 4 checks
+   🐂 The Bull [llm:openai/gpt-oss-120b]: GO (65%) — RSI near oversold and a modest 4% pullback suggest a bounce opportunity with low risk and tight spread
+   📊 The Quant [llm:openai/gpt-oss-120b]: GO (70%) — RSI near oversold, low spread, modest size and acceptable volatility make this a prudent entry
+   🛡️ The Risk Officer [llm:openai/gpt-oss-120b]: GO (80%) — Trade size is modest (2.6% of balance) and liquidity is sufficient, posing minimal risk to capital
+   order: SIMULATED BUY 0.0004 BTC (DRY_RUN) id=sim_169da3b018a2
+
+   ⚪ WHITE SMOKE — the committee concurs. Order presented for human confirmation.
+      → SIMULATED: BUY 0.0004 BTC (~$25.68) [sim_169da3b018a2]
+
+────────────────────────────────────────────────────────────────────────
+  Scenario 2 — The memecoin FOMO
+  proposal: BUY 20000000 PEPE — "PEPE is up 41%, everyone says moon"
+────────────────────────────────────────────────────────────────────────
+   evidence: PEPE @ $0.0000118 | RSI 88 | 24h 41.0% | vol 22.0% | spread 85 bps (fixture)
+   🚫 guardrail SYMBOL_NOT_ALLOWED: PEPE is not on the allowlist (BTC, ETH, BNB, SOL, USDC, USDT)
+
+   ⚫ BLACK SMOKE — no trade. (GUARDRAIL_BLOCK)
+
+────────────────────────────────────────────────────────────────────────
+  Scenario 3 — The oversized chase
+  proposal: BUY 2.5 SOL — "SOL breaking out, load up"
+────────────────────────────────────────────────────────────────────────
+   evidence: SOL @ $148 | RSI 72 | 24h 6.8% | vol 5.9% | spread 12 bps (fixture)
+   guardrails passed: $370.00 notional, 4 checks
+   🐂 The Bull [llm:openai/gpt-oss-120b]: GO (65%) — The 6.8% 24h rally and breakout momentum justify a buy despite the overbought RSI, though the 37% position size is sizable.
+   📊 The Quant [llm:openai/gpt-oss-120b]: NO-GO (80%) — RSI 72 indicates overbought conditions and the trade size is too large for the current volatility
+   🛡️ The Risk Officer [llm:openai/gpt-oss-120b]: NO-GO (80%) — The trade uses 37% of the account on a single, overbought asset, posing excessive capital risk
+
+   ⚫ BLACK SMOKE — no trade. (RISK_VETO)
+
+========================================================================
+   Sealed ballots written to ./ballots/ (commit-reveal audit trail).
+   In live mode the ballot hashes are emitted to BSC testnet before the order.
+========================================================================
+
