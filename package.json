@@ -6,7 +6,9 @@
   "main": "src/committee.js",
   "scripts": {
     "demo": "node demo/run.js",
+    "demo:llm": "node --env-file=.env demo/run.js",
     "chat": "node src/chat.js",
+    "chat:llm": "node --env-file=.env src/chat.js",
     "test": "node --test test/*.test.js",
     "deploy:chain": "node scripts/deploy.mjs",
     "verify:ballots": "node scripts/verify-ballots.mjs"
