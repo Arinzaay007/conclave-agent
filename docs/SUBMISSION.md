@@ -38,7 +38,8 @@ verdict and attested to BSC testnet, giving a tamper-evident decision trail.
 - [ ] Deploy `BallotEmitter.sol` to BSC testnet (`npm run deploy:chain`)
 - [ ] Run a live-LLM session (`LLM_MODE=llm`) and `npm run verify:ballots`
 - [ ] Record demo video per `docs/VIDEO_DEMO_SCRIPT.md`
-- [ ] Follow @Binance, repost, reply with video + repo, complete survey
+- [ ] Create GitHub repo, push, set `<GH_URL>` in `docs/SUBMISSION_POSTS.md`
+- [ ] Follow @Binance, repost, post the X reply + survey blurb from `docs/SUBMISSION_POSTS.md`, complete survey
 
 ## Honesty / maturity statement
 - Trading logic in dry-run uses **deterministic rules standing in for the
