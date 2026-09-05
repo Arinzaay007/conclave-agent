@@ -19,29 +19,38 @@ const FALLBACK_QUOTES = {
 };
 
 export async function getQuote(symbol, { dryRun = true } = {}) {
+  const sym = symbol.toUpperCase();
   if (dryRun) {
-    const q = FALLBACK_QUOTES[symbol.toUpperCase()];
-    if (!q) throw new Error(`No fixture for ${symbol}`);
-    return { symbol: symbol.toUpperCase(), source: "fixture", ...q };
+    const q = FALLBACK_QUOTES[sym];
+    if (!q) throw new Error(`No fixture for ${sym}`);
+    return { symbol: sym, source: "fixture", ...q };
   }
   // Live: public Binance spot data (no auth needed for klines/ticker).
-  const sym = symbol.toUpperCase() + "USDT";
-  const [ticker, klines] = await Promise.all([
-    fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${sym}`).then((r) => r.json()),
-    fetch(`https://api.binance.com/api/v3/klines?symbol=${sym}&interval=1h&limit=15`).then((r) => r.json()),
-  ]);
-  const closes = klines.map((k) => parseFloat(k[4]));
-  return {
-    symbol: symbol.toUpperCase(),
-    source: "binance-public",
-    price: parseFloat(ticker.lastPrice),
-    rsi14: rsi(closes, 14),
-    change24hPct: parseFloat(ticker.priceChangePercent),
-    volatility24hPct: parseFloat(ticker.priceChangePercent) < 0
-      ? Math.abs(parseFloat(ticker.priceChangePercent)) * 0.7
-      : parseFloat(ticker.priceChangePercent),
-    spreadBps: Math.round(((parseFloat(ticker.askPrice) - parseFloat(ticker.bidPrice)) / parseFloat(ticker.lastPrice)) * 10000),
-  };
+  // Binance geo-fences some regions (returns {code,msg} instead of data), and
+  // networks fail — degrade gracefully to the fixture so a session never dies.
+  try {
+    const [ticker, klines] = await Promise.all([
+      fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${sym}USDT`).then((r) => r.json()),
+      fetch(`https://api.binance.com/api/v3/klines?symbol=${sym}USDT&interval=1h&limit=15`).then((r) => r.json()),
+    ]);
+    if (!Array.isArray(klines) || klines.length < 15 || typeof ticker?.lastPrice !== "string") {
+      throw new Error(ticker?.msg ? `Binance: ${ticker.msg.slice(0, 80)}` : "unexpected market-data shape");
+    }
+    const closes = klines.map((k) => parseFloat(k[4]));
+    return {
+      symbol: sym,
+      source: "binance-public",
+      price: parseFloat(ticker.lastPrice),
+      rsi14: rsi(closes, 14),
+      change24hPct: parseFloat(ticker.priceChangePercent),
+      volatility24hPct: Math.abs(parseFloat(ticker.priceChangePercent)),
+      spreadBps: Math.round(((parseFloat(ticker.askPrice) - parseFloat(ticker.bidPrice)) / parseFloat(ticker.lastPrice)) * 10000),
+    };
+  } catch (err) {
+    const q = FALLBACK_QUOTES[sym];
+    if (!q) throw err;
+    return { symbol: sym, source: "fixture-fallback", warning: String(err.message || err).slice(0, 120), ...q };
+  }
 }
 
 /** Standard 14-period RSI (Wilder). Deterministic; used by the Quant persona. */

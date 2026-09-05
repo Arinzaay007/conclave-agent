@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.svg" width="140" alt="Conclave logo" />
+</p>
+
 # Conclave
 
 **Three agents, locked room, one verdict. No trade without white smoke.**
@@ -108,6 +112,11 @@ See [`docs/HOW_IT_WORKS.md`](docs/HOW_IT_WORKS.md) for the full walkthrough,
 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the design, and
 [`docs/SECURITY.md`](docs/SECURITY.md) for the threat model. Demo script:
 [`docs/VIDEO_DEMO_SCRIPT.md`](docs/VIDEO_DEMO_SCRIPT.md).
+
+**Taking it live / submitting** — GitHub push, LLM key, BSC testnet deploy,
+live Agent OS token, and the entry checklist are all in
+[`docs/SETUP.md`](docs/SETUP.md). Ready-to-paste X post and survey blurb:
+[`docs/SUBMISSION_POSTS.md`](docs/SUBMISSION_POSTS.md).
 
 ## License
 

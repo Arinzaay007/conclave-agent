@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Conclave">
+  <rect width="256" height="256" rx="52" fill="#0b0e14"/>
+  <!-- three chairs around a table (the committee) -->
+  <g fill="none" stroke="#e6e6e6" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="128" cy="140" r="62" />
+    <!-- Bull (top-left) -->
+    <path d="M88 102 l-14 -20 M88 102 l14 -18" stroke="#f0b90b"/>
+    <circle cx="104" cy="116" r="9" fill="#f0b90b" stroke="none"/>
+    <!-- Quant (top-right) -->
+    <path d="M168 102 l14 -20 M168 102 l-14 -18" stroke="#4a9eff"/>
+    <circle cx="152" cy="116" r="9" fill="#4a9eff" stroke="none"/>
+    <!-- Risk (bottom center, veto) -->
+    <circle cx="128" cy="164" r="9" fill="#e5484d" stroke="none"/>
+  </g>
+  <!-- white smoke signal -->
+  <circle cx="128" cy="206" r="8" fill="#f4f4f5"/>
+  <text x="128" y="236" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="700" fill="#e6e6e6" letter-spacing="3">CONCLAVE</text>
+</svg>
